@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <package>
-  <name>pr_ordata</name>
+  <name>arm_ordata</name>
   <version>0.3.0</version>
   <description>
     The pr_ordata package provides OpenRAVE-specific environments, meshes,
-    articulated bodies, robots, and database files used by the Personal
-    Robotics Lab at Carnegie Mellon University.
+    articulated bodies, robots, and database files used by the Autonomous Robotic
+    Manipulation Lab at University of Michigan.
   </description>
-  <url type="repository">https://github.com/personalrobotics/pr-ordata</url>
-  <maintainer email="mkoval@cs.cmu.edu">Michael Koval</maintainer>
+  <url type="repository">https://github.com/UM-ARM-Lab/arm_ordata</url>
+  <maintainer email="dmcconac@umich.edu">Dale McConachie</maintainer>
   <license>BSD</license>
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>openrave_catkin</build_depend>

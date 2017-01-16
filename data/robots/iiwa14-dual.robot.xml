@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- combines two Kuka iiwa 14 arms -->
+<Robot name="iiwa14">
+    <KinBody>
+        <!-- Baxter Base -->
+        <body name="base">
+            <geom type="box">
+                <!-- total extents: 36" x 32" x 10"-->
+                <extents>0.4572 0.4064 0.127</extents>
+                <translation>0 0 0.127</translation>
+                <diffusecolor>0.4 0.5 0.6</diffusecolor>
+            </geom>
+        </body>
+        <!-- Baxter Pedestal -->
+        <body name="pedestal">
+            <geom type="cylinder">
+                <height>0.84</height>
+                <radius>0.127</radius>
+                <diffusecolor>0.4 0.5 0.6</diffusecolor>
+                <RotationAxis>1 0 0 90</RotationAxis>
+                <Translation>0 0 0.42</Translation>
+            </geom>
+        </body>
+        <!-- Baxter Pedestal Spacer -->
+        <body name="spacer">
+            <geom type="cylinder">
+                <height>0.12</height>
+                <radius>0.150</radius>
+                <diffusecolor>0.4 0.5 0.6</diffusecolor>
+                <RotationAxis>1 0 0 90</RotationAxis>
+                <Translation>0 0 0.78</Translation>
+            </geom>
+        </body>
+        <!-- Baxter Pedestal Mounting Plate -->
+        <body name="mounting_plate">
+            <geom type="cylinder">
+                <height>0.0254</height>
+                <radius>0.185</radius>
+                <diffusecolor>0.4 0.5 0.6</diffusecolor>
+                <RotationAxis>1 0 0 90</RotationAxis>
+                <Translation>0 0 0.8527</Translation>
+            </geom>
+        </body>
+        <!-- torso -->
+        <body name="torso">
+            <geom type="box">
+                <extents>0.05715 0.01905 0.75</extents>
+                <translation>0 0 0.75</translation>
+                <diffusecolor>0.4 0.5 0.6</diffusecolor>
+            </geom>
+        </body>
+
+        <!-- Dummy joints -->
+        <joint name="base_pedestal_dummy" type="hinge" enable="false">
+            <body>base</body>
+            <body>pedestal</body>
+            <limitsdeg>0 0</limitsdeg>
+        </joint>
+
+        <joint name="pedestal_spacer_dummy" type="hinge" enable="false">
+            <body>pedestal</body>
+            <body>spacer</body>
+            <limitsdeg>0 0</limitsdeg>
+        </joint>
+
+        <joint name="spacer_mounting_plate_dummy" type="hinge" enable="false">
+            <body>spacer</body>
+            <body>mounting_plate</body>
+            <limitsdeg>0 0</limitsdeg>
+        </joint>
+
+        <joint name="base_torso" type="hinge" enable="false">
+            <body>base</body>
+            <body>torso</body>
+            <limitsdeg>0 0</limitsdeg>
+        </joint>
+    </KinBody>
+
+    <!-- left arm -->
+    <Robot>
+        <Robot prefix = "l_" file="iiwa14.robot.xml"></Robot>
+        <!--<RotationAxis>1 0 0 -90</RotationAxis>-->
+        <RotationMat>
+             0.9977    0.0085    0.0670
+            -0.0670    0.2500    0.9659
+            -0.0085   -0.9682    0.2500
+        </RotationMat>
+        <Translation>0 0.05 1.5</Translation>
+    </Robot>
+
+    <!-- right arm -->
+    <Robot>
+        <Robot prefix = "r_" file="iiwa14.robot.xml"></Robot>
+        <!--<RotationAxis>1 0 0 90</RotationAxis>-->
+        <RotationMat>
+            0.9977   -0.0085    0.0670
+            0.0670    0.2500   -0.9659
+           -0.0085    0.9682    0.2500
+        </RotationMat>
+        <Translation>0 -0.05 1.5</Translation>
+    </Robot>
+
+    <!-- connect the tow arms with dummy joints (why?) -->
+    <KinBody>
+        <joint name="leftdummy" type="hinge" enable="false">
+            <body>torso</body>
+            <body>l_root</body>
+            <limitsdeg>0 0</limitsdeg>
+        </joint>
+        <joint name="rightdummy" type="hinge" enable="false">
+            <body>torso</body>
+            <body>r_root</body>
+            <limitsdeg>0 0</limitsdeg>
+        </joint>
+    </KinBody>
+
+</Robot>

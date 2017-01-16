@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Robot name="iiwa7">
+    <KinBody file="iiwa7.kinbody.xml" makejoinedlinksadjacent="true">
+        <translation>0 0 0</translation>
+    </KinBody>
+
+    <Manipulator name="iiwa7_arm">
+        <base>root</base>
+        <effector>iiwa_link_ee</effector>
+        <!--iksolver>iiwa7_arm_ikfast</iksolver-->
+    </Manipulator>
+</Robot>
