@@ -34,7 +34,7 @@ if __name__ == "__main__":
     urdf_module = rave.RaveCreateModule(env, 'urdf')
 
     with env:
-        name = urdf_module.SendCommand('LoadURI package://arm_ordata/data/robots/dual_arm_robot.urdf package://dual_arm_moveit_config/config/dual_arm_robot.srdf')
+        name = urdf_module.SendCommand('LoadURI package://wiktor_description/urdf/wiktor.urdf package://wiktor_moveit_config/config/wiktor.srdf')
         robot = env.GetRobot(name)
 
     IPython.embed()
