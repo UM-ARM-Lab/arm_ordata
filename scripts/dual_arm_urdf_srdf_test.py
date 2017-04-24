@@ -16,7 +16,7 @@ if __name__ == "__main__":
     # http://wiki.ros.org/Packages#Python
     rospack = rospkg.RosPack()
     path = rospack.get_path('arm_ordata')
-    env.Load(path + '/data/wiktor_test.env.xml')
+    env.Load(path + '/data/victor_test.env.xml')
     time.sleep(0.1)
 
     # rave.RaveSetDebugLevel(rave.DebugLevel.Debug)  # set output level to debug
@@ -38,7 +38,7 @@ if __name__ == "__main__":
     urdf_module = rave.RaveCreateModule(env, 'urdf')
 
     with env:
-        name = urdf_module.SendCommand('LoadURI package://wiktor_description/urdf/wiktor.urdf package://wiktor_moveit_config/config/wiktor.srdf')
+        name = urdf_module.SendCommand('LoadURI package://victor_description/urdf/victor.urdf package://victor_moveit_config/config/victor.srdf')
         robot = env.GetRobot(name)
     time.sleep(1)
 
