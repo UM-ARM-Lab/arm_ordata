@@ -7,6 +7,16 @@ import IPython
 import math
 import numpy as np
 
+def plot_axes(env, trans, lengths = (0.25, 0.25, 0.25), thickness = 0.005):
+    red = np.array([1, 0, 0, 1])
+    green = np.array([0, 1, 0, 1])
+    blue = np.array([0, 0, 1, 1])
+    plot_handles = []
+    plot_handles.append(env.drawarrow(trans[0:3, 3], trans[0:3, 3] + trans[0:3, 0] * lengths[0], thickness, red))
+    plot_handles.append(env.drawarrow(trans[0:3, 3], trans[0:3, 3] + trans[0:3, 1] * lengths[1], thickness, green))
+    plot_handles.append(env.drawarrow(trans[0:3, 3], trans[0:3, 3] + trans[0:3, 2] * lengths[2], thickness, blue))
+    return plot_handles
+
 
 def waitrobot(robot):
     """busy wait for robot completion"""
@@ -17,8 +27,7 @@ def waitrobot(robot):
 if __name__ == "__main__":
     env = rave.Environment()  # create openrave environment
 
-    # env.SetViewer('qtcoin')  # attach viewer (optional)
-    env.SetViewer('RViz')  # attach viewer (optional)
+    env.SetViewer('qtcoin')  # attach viewer (optional)
     env.GetViewer().SetCamera([
         [ 0.,  0.,  1., -3.6],
         [-1.,  0.,  0.,  0.],
@@ -26,42 +35,27 @@ if __name__ == "__main__":
         [ 0.,  0.,  0.,  1.]
     ])
 
-    # robot_single_arm = env.ReadRobotURI('/home/dmcconachie/Dropbox/catkin_ws/src/personal_robotics_lab/arm_ordata/data/robots/iiwa7.robot.xml')
     robot_single_arm = env.ReadRobotURI('robots/iiwa7.robot.xml')
-    # robot_single_arm = env.ReadRobotURI('robots/iiwa14.robot.xml')
     env.Add(robot_single_arm, True)
 
-    #robot_dual_arm = env.ReadRobotURI('iiwa14-dual.robot.xml')
-    #env.Add(robot_dual_arm, True)
+    ikmodel = rave.databases.inversekinematics.InverseKinematicsModel(robot=robot_single_arm, iktype=rave.IkParameterization.Type.Transform6D)
 
-    # joint = range(6, 7)
-    # val = np.ones(len(joint))
-    # while True:
-    #     with env:
-    #         robot_orxml.SetActiveDOFs(joint)
-    #         robot_orxml.SetActiveDOFValues(val)
-    #         robot_orxml.GetController().SetDesired(robot_orxml.GetDOFValues())
-    #
-    #         robot_urdf.SetActiveDOFs(joint)
-    #         robot_urdf.SetActiveDOFValues(val)
-    #         robot_urdf.GetController().SetDesired(robot_urdf.GetDOFValues())
-    #
-    #     waitrobot(robot_orxml)
-    #     waitrobot(robot_urdf)
-    #
-    #     IPython.embed()
-    #     val = 1.0 - val
+    if not ikmodel.load():
+        ikmodel.autogenerate()  # autogenerate if one doesn't exist
 
-    #kinematic_reachability = rave.databases.kinematicreachability.ReachabilityModel(robot_single_arm, iktype=rave.IkParameterization.Type.Transform6D)
-    #kinematic_reachability.load()
+    rot_y_pi_over2 = rave.matrixFromAxisAngle(np.array([1.0, 0.0, 0.0]) * np.pi / 2.0)
+    trans = np.array([
+        [1., 0., 0., 0.526],
+        [0., 1., 0., 0.0],
+        [0., 0., 1., 0.74],
+        [0., 0., 0., 1.]
+    ])
+    target_pose = trans.dot(rot_y_pi_over2)
+    ee_target_plot = plot_axes(env, target_pose)
 
-    # ikmodel = rave.databases.inversekinematics.InverseKinematicsModel(robot=robot_orxml, iktype=rave.IkParameterization.Type.Transform6D)
-    #
-    # if not ikmodel.load():
-    #     ikmodel.autogenerate()  # autogenerate if one doesn't exist
-    # lmodel = rave.databases.linkstatistics.LinkStatisticsModel(robot_orxml)
-    # if not lmodel.load():
-    #     lmodel.autogenerate()
-    # lmodel.setRobotWeights()
+    manip = robot_single_arm.GetManipulators()[0]
+    target_config = manip.FindIKSolution(target_pose, rave.IkFilterOptions.CheckEnvCollisions)
+    robot_single_arm.SetDOFValues(target_config)
+    ee_plot = plot_axes(env, robot_single_arm.GetLink('iiwa_link_ee').GetTransform())
 
     IPython.embed()

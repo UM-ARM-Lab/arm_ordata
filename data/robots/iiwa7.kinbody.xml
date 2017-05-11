@@ -77,7 +77,7 @@
         <geometry type="trimesh">
             <render>meshes/iiwa7/visual/link_3.stl</render>
             <collision>meshes/iiwa7/collision/link_3.stl</collision>
-            <translation>0 -0.005 -0.026</translation>
+            <translation>0 0 -0.026</translation>
             <diffusecolor>1.0 0.423529411765 0.0392156862745</diffusecolor>
             <transparency>0</transparency>
         </geometry>
