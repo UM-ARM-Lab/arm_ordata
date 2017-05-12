@@ -43,14 +43,14 @@ if __name__ == "__main__":
     if not ikmodel.load():
         ikmodel.autogenerate()  # autogenerate if one doesn't exist
 
-    rot_y_pi_over2 = rave.matrixFromAxisAngle(np.array([1.0, 0.0, 0.0]) * np.pi / 2.0)
+    rot = rave.matrixFromAxisAngle(np.array([0.0, 1.0, 0.0]) * np.pi / 2.0)
     trans = np.array([
         [1., 0., 0., 0.526],
         [0., 1., 0., 0.0],
         [0., 0., 1., 0.74],
         [0., 0., 0., 1.]
     ])
-    target_pose = trans.dot(rot_y_pi_over2)
+    target_pose = trans.dot(rot)
     ee_target_plot = plot_axes(env, target_pose)
 
     manip = robot_single_arm.GetManipulators()[0]
